@@ -1,0 +1,1726 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Almond | Luxury Clothing</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --dark-green: #002E2C;
+            --sage-green: #7A8C7B;
+            --gold: #C1A86E;
+            --cream: #FAF7F0;
+            --charcoal: #2F2F2F;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--charcoal);
+            background-color: var(--cream);
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+        
+        .serif {
+            font-family: 'Cormorant Garamond', serif;
+        }
+        
+        .text-dark-green { color: var(--dark-green); }
+        .bg-dark-green { background-color: var(--dark-green); }
+        .text-sage-green { color: var(--sage-green); }
+        .bg-sage-green { background-color: var(--sage-green); }
+        .text-gold { color: var(--gold); }
+        .bg-gold { background-color: var(--gold); }
+        .text-cream { color: var(--cream); }
+        .bg-cream { background-color: var(--cream); }
+        .text-charcoal { color: var(--charcoal); }
+        .bg-charcoal { background-color: var(--charcoal); }
+        
+        .luxury-border {
+            border: 1px solid rgba(193, 168, 110, 0.2);
+        }
+        
+        .luxury-shadow {
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        }
+        
+        .hover-lift {
+            transition: all 0.3s ease;
+        }
+        .hover-lift:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Fade in from left animations */
+        .fade-in-left {
+            opacity: 0;
+            transform: translateX(-50px);
+            animation: fadeInLeft 0.8s ease forwards;
+        }
+        
+        @keyframes fadeInLeft {
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        .fade-in-right {
+            opacity: 0;
+            transform: translateX(50px);
+            animation: fadeInRight 0.8s ease forwards;
+        }
+        
+        @keyframes fadeInRight {
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        .fade-in-up {
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.8s ease forwards;
+        }
+        
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Staggered animations for children */
+        .stagger-children > * {
+            opacity: 0;
+            transform: translateX(-30px);
+            animation: fadeInLeft 0.6s ease forwards;
+        }
+        
+        .stagger-children > *:nth-child(1) { animation-delay: 0.1s; }
+        .stagger-children > *:nth-child(2) { animation-delay: 0.2s; }
+        .stagger-children > *:nth-child(3) { animation-delay: 0.3s; }
+        .stagger-children > *:nth-child(4) { animation-delay: 0.4s; }
+        .stagger-children > *:nth-child(5) { animation-delay: 0.5s; }
+        .stagger-children > *:nth-child(6) { animation-delay: 0.6s; }
+        
+        .btn-luxury {
+            background: linear-gradient(135deg, var(--dark-green), var(--sage-green));
+            color: white;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-luxury:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn-gold {
+            background: linear-gradient(135deg, var(--gold), #d4b87a);
+            color: var(--dark-green);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-gold:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(193, 168, 110, 0.3);
+        }
+        
+        /* Product card specific styles */
+        .product-card {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        
+        .product-card-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .product-card-actions {
+            margin-top: auto;
+            padding-top: 1rem;
+        }
+        
+        /* Product detail page styles */
+        .product-gallery {
+            position: relative;
+        }
+        
+        .product-thumbnails {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        
+        .product-thumbnail {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+        
+        .product-thumbnail.active {
+            border-color: var(--gold);
+        }
+        
+        .size-option {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--sage-green);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .size-option.selected {
+            background-color: var(--dark-green);
+            color: var(--cream);
+            border-color: var(--dark-green);
+        }
+        
+        .color-option {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+        
+        .color-option.selected {
+            border-color: var(--gold);
+            transform: scale(1.1);
+        }
+        
+        /* Admin Dashboard Styles */
+        .admin-sidebar {
+            width: 250px;
+            background: var(--dark-green);
+            color: var(--cream);
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            transition: all 0.3s ease;
+        }
+        
+        .admin-main {
+            margin-left: 250px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* Payment Processing Styles */
+        .payment-method {
+            border: 2px solid var(--sage-green);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .payment-method.selected {
+            border-color: var(--gold);
+            background-color: rgba(193, 168, 110, 0.1);
+        }
+        
+        .payment-method:hover {
+            border-color: var(--gold);
+        }
+        
+        .payment-loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="bg-cream">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        function App() {
+            const [currentPage, setCurrentPage] = useState('home');
+            const [cart, setCart] = useState([]);
+            const [selectedProduct, setSelectedProduct] = useState(null);
+            const [isAdmin, setIsAdmin] = useState(false);
+            const [orders, setOrders] = useState([]);
+            
+            // Initialize with sample orders if none exist
+            useEffect(() => {
+                const savedOrders = localStorage.getItem('almond_orders');
+                if (savedOrders) {
+                    setOrders(JSON.parse(savedOrders));
+                } else {
+                    // Sample orders for demo
+                    const sampleOrders = [
+                        {
+                            id: 'ORD-001',
+                            date: '2024-01-15',
+                            customer: 'Eleanor Smith',
+                            email: 'eleanor@example.com',
+                            total: 1299,
+                            status: 'delivered',
+                            items: [
+                                { name: 'Classic Cashmere Coat', price: 1299, quantity: 1 }
+                            ]
+                        },
+                        {
+                            id: 'ORD-002',
+                            date: '2024-01-18',
+                            customer: 'James Wilson',
+                            email: 'james@example.com',
+                            total: 1349,
+                            status: 'processing',
+                            items: [
+                                { name: 'Silk Evening Gown', price: 899, quantity: 1 },
+                                { name: 'Cashmere Sweater', price: 450, quantity: 1 }
+                            ]
+                        }
+                    ];
+                    setOrders(sampleOrders);
+                    localStorage.setItem('almond_orders', JSON.stringify(sampleOrders));
+                }
+            }, []);
+            
+            // Sample products with more details
+            const products = [
+                {
+                    id: 1,
+                    name: "Classic Cashmere Coat",
+                    price: 1299,
+                    category: "outerwear",
+                    images: [
+                        "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+                        "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+                        "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
+                    ],
+                    description: "Luxurious cashmere coat with a timeless silhouette. Crafted from the finest Mongolian cashmere, this coat offers exceptional warmth without weight.",
+                    fullDescription: "Our Classic Cashmere Coat is the epitome of timeless luxury. Made from 100% Mongolian cashmere, it features a tailored fit, notched lapel, and hidden button closure. The fully lined interior ensures comfort and durability, while the two front pockets add both style and functionality. Perfect for both formal occasions and everyday elegance.",
+                    sizes: ["XS", "S", "M", "L", "XL"],
+                    colors: [
+                        { name: "Navy", value: "#002E2C" },
+                        { name: "Camel", value: "#C1A86E" },
+                        { name: "Black", value: "#2F2F2F" },
+                        { name: "Grey", value: "#7A8C7B" }
+                    ],
+                    details: [
+                        "100% Mongolian cashmere",
+                        "Fully lined with silk",
+                        "Hidden button closure",
+                        "Two front pockets",
+                        "Dry clean only"
+                    ],
+                    care: "Dry clean only. Do not bleach. Iron on low heat. Store in a cool, dry place.",
+                    inventory: 15
+                },
+                {
+                    id: 2,
+                    name: "Silk Evening Gown",
+                    price: 899,
+                    category: "dresses",
+                    images: [
+                        "https://images.unsplash.com/photo-1566479179816-d72d4cbe0175?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+                        "https://images.unsplash.com/photo-1566479179816-d72d4cbe0175?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+                        "https://images.unsplash.com/photo-1566479179816-d72d4cbe0175?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
+                    ],
+                    description: "Elegant silk gown for special occasions. Flowing silhouette with delicate details.",
+                    fullDescription: "The Silk Evening Gown is a masterpiece of elegance and sophistication. Crafted from the finest mulberry silk, it drapes beautifully and feels luxurious against the skin. The gown features a subtle A-line silhouette, delicate cap sleeves, and a back keyhole detail. Perfect for galas, weddings, and other special occasions where you want to make a lasting impression.",
+                    sizes: ["XS", "S", "M", "L"],
+                    colors: [
+                        { name: "Ivory", value: "#FAF7F0" },
+                        { name: "Black", value: "#2F2F2F" },
+                        { name: "Burgundy", value: "#800020" }
+                    ],
+                    details: [
+                        "100% mulberry silk",
+                        "Hidden back zipper",
+                        "Lined bodice",
+                        "Hand-finished details",
+                        "Dry clean only"
+                    ],
+                    care: "Dry clean only. Store hanging in a garment bag. Avoid direct sunlight.",
+                    inventory: 8
+                },
+                {
+                    id: 3,
+                    name: "Tailored Wool Trousers",
+                    price: 450,
+                    category: "bottoms",
+                    images: [
+                        "https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+                        "https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+                        "https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
+                    ],
+                    description: "Perfectly tailored trousers in premium wool. Classic fit with modern details.",
+                    fullDescription: "Our Tailored Wool Trousers combine classic tailoring with contemporary comfort. Made from premium Italian wool, they feature a straight leg silhouette, front pleats, and a comfortable waistband. The hidden side adjusters allow for a perfect fit, while the functional back pockets add practicality. These trousers are versatile enough for both office wear and sophisticated casual occasions.",
+                    sizes: ["30", "32", "34", "36", "38"],
+                    colors: [
+                        { name: "Charcoal", value: "#2F2F2F" },
+                        { name: "Navy", value: "#002E2C" },
+                        { name: "Cream", value: "#FAF7F0" }
+                    ],
+                    details: [
+                        "100% Italian wool",
+                        "Front pleats",
+                        "Hidden side adjusters",
+                        "Functional back pockets",
+                        "Professional dry clean"
+                    ],
+                    care: "Professional dry clean only. Press with steam. Do not tumble dry.",
+                    inventory: 22
+                }
+            ];
+            
+            const addToCart = (product, selectedOptions = {}) => {
+                const productWithOptions = {
+                    ...product,
+                    selectedSize: selectedOptions.size || product.sizes[0],
+                    selectedColor: selectedOptions.color || product.colors[0].name,
+                    quantity: selectedOptions.quantity || 1
+                };
+                setCart([...cart, productWithOptions]);
+                
+                // Show notification
+                const notification = document.createElement('div');
+                notification.className = 'fixed top-4 right-4 bg-dark-green text-cream px-4 py-2 rounded luxury-shadow z-50 fade-in-up';
+                notification.innerHTML = `<i class="fas fa-check mr-2"></i> ${product.name} added to cart!`;
+                document.body.appendChild(notification);
+                
+                setTimeout(() => {
+                    notification.remove();
+                }, 3000);
+            };
+            
+            const viewProductDetails = (product) => {
+                setSelectedProduct(product);
+                setCurrentPage('product-detail');
+            };
+            
+            // Admin login function
+            const handleAdminLogin = () => {
+                // In a real app, this would have proper authentication
+                setIsAdmin(true);
+                setCurrentPage('admin-dashboard');
+            };
+            
+            // Navigation
+            const Navigation = () => (
+                <header className="bg-dark-green text-cream sticky top-0 z-50 luxury-border-b fade-in-down">
+                    <div className="container mx-auto px-4 py-4">
+                        <div className="flex justify-between items-center">
+                            <div className="serif text-2xl font-bold cursor-pointer fade-in-left" onClick={() => setCurrentPage('home')}>
+                                Almond
+                            </div>
+                            <nav className="hidden md:flex space-x-8 stagger-children">
+                                {['home', 'shop', 'about', 'contact'].map(page => (
+                                    <button
+                                        key={page}
+                                        className={`serif text-lg hover:text-gold transition-colors ${currentPage === page ? 'text-gold' : ''}`}
+                                        onClick={() => setCurrentPage(page)}
+                                    >
+                                        {page.charAt(0).toUpperCase() + page.slice(1)}
+                                    </button>
+                                ))}
+                                {isAdmin && (
+                                    <button
+                                        className="serif text-lg hover:text-gold transition-colors text-gold"
+                                        onClick={() => setCurrentPage('admin-dashboard')}
+                                    >
+                                        Admin
+                                    </button>
+                                )}
+                            </nav>
+                            <div className="flex items-center space-x-6 stagger-children">
+                                {!isAdmin && (
+                                    <button 
+                                        className="hover:text-gold transition-colors"
+                                        onClick={handleAdminLogin}
+                                    >
+                                        <i className="fas fa-lock"></i>
+                                    </button>
+                                )}
+                                <button className="hover:text-gold transition-colors">
+                                    <i className="fas fa-user"></i>
+                                </button>
+                                <button 
+                                    className="relative hover:text-gold transition-colors"
+                                    onClick={() => setCurrentPage('cart')}
+                                >
+                                    <i className="fas fa-shopping-bag"></i>
+                                    {cart.length > 0 && (
+                                        <span className="absolute -top-2 -right-2 bg-gold text-dark-green text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                                            {cart.length}
+                                        </span>
+                                    )}
+                                </button>
+                                <button className="md:hidden">
+                                    <i className="fas fa-bars"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </header>
+            );
+            
+            // Product Card Component
+            const ProductCard = ({ product, index }) => (
+                <div 
+                    className="product-card bg-white rounded-lg overflow-hidden luxury-shadow luxury-border hover-lift fade-in-left cursor-pointer"
+                    style={{animationDelay: `${index * 0.2}s`}}
+                    onClick={() => viewProductDetails(product)}
+                >
+                    <div className="h-80 overflow-hidden">
+                        <img 
+                            src={product.images[0]} 
+                            alt={product.name} 
+                            className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+                        />
+                    </div>
+                    <div className="p-6 product-card-content">
+                        <div>
+                            <h3 className="serif text-xl text-charcoal mb-2">{product.name}</h3>
+                            <p className="text-sage-green mb-4">{product.description}</p>
+                        </div>
+                        <div className="product-card-actions">
+                            <div className="flex justify-between items-center">
+                                <span className="serif text-2xl text-dark-green">${product.price}</span>
+                                <button 
+                                    className="btn-luxury px-4 py-2 rounded hover:bg-opacity-90 transition-colors"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        addToCart(product);
+                                    }}
+                                >
+                                    <i className="fas fa-plus mr-1"></i> Add to Cart
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+            
+            // Payment Processing Component
+            const PaymentProcessing = ({ orderTotal, onPaymentSuccess, onBack }) => {
+                const [paymentMethod, setPaymentMethod] = useState('card');
+                const [isProcessing, setIsProcessing] = useState(false);
+                const [cardDetails, setCardDetails] = useState({
+                    number: '',
+                    expiry: '',
+                    cvv: '',
+                    name: ''
+                });
+                
+                const handlePayment = async () => {
+                    setIsProcessing(true);
+                    
+                    // Simulate payment processing
+                    setTimeout(() => {
+                        setIsProcessing(false);
+                        // In a real app, this would integrate with Stripe, PayPal, etc.
+                        onPaymentSuccess();
+                    }, 3000);
+                };
+                
+                return (
+                    <div className="max-w-2xl mx-auto fade-in-left">
+                        <h2 className="serif text-3xl text-charcoal mb-6">Payment Information</h2>
+                        
+                        <div className="bg-white p-6 rounded-lg luxury-shadow luxury-border mb-6">
+                            <h3 className="serif text-xl text-charcoal mb-4">Select Payment Method</h3>
+                            
+                            <div className="space-y-4">
+                                <div 
+                                    className={`payment-method ${paymentMethod === 'card' ? 'selected' : ''}`}
+                                    onClick={() => setPaymentMethod('card')}
+                                >
+                                    <div className="flex items-center">
+                                        <i className="fas fa-credit-card text-gold text-xl mr-3"></i>
+                                        <div>
+                                            <h4 className="serif text-lg text-charcoal">Credit/Debit Card</h4>
+                                            <p className="text-sage-green">Pay with Visa, Mastercard, or American Express</p>
+                                        </div>
+                                    </div>
+                                    
+                                    {paymentMethod === 'card' && (
+                                        <div className="mt-4 space-y-4">
+                                            <div>
+                                                <label className="block text-charcoal mb-2">Card Number</label>
+                                                <input 
+                                                    type="text" 
+                                                    placeholder="1234 5678 9012 3456"
+                                                    className="w-full px-4 py-2 border border-sage-green rounded focus:outline-none focus:border-gold"
+                                                    value={cardDetails.number}
+                                                    onChange={(e) => setCardDetails({...cardDetails, number: e.target.value})}
+                                                />
+                                            </div>
+                                            <div className="grid grid-cols-2 gap-4">
+                                                <div>
+                                                    <label className="block text-charcoal mb-2">Expiry Date</label>
+                                                    <input 
+                                                        type="text" 
+                                                        placeholder="MM/YY"
+                                                        className="w-full px-4 py-2 border border-sage-green rounded focus:outline-none focus:border-gold"
+                                                        value={cardDetails.expiry}
+                                                        onChange={(e) => setCardDetails({...cardDetails, expiry: e.target.value})}
+                                                    />
+                                                </div>
+                                                <div>
+                                                    <label className="block text-charcoal mb-2">CVV</label>
+                                                    <input 
+                                                        type="text" 
+                                                        placeholder="123"
+                                                        className="w-full px-4 py-2 border border-sage-green rounded focus:outline-none focus:border-gold"
+                                                        value={cardDetails.cvv}
+                                                        onChange={(e) => setCardDetails({...cardDetails, cvv: e.target.value})}
+                                                    />
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <label className="block text-charcoal mb-2">Name on Card</label>
+                                                <input 
+                                                    type="text" 
+                                                    placeholder="John Doe"
+                                                    className="w-full px-4 py-2 border border-sage-green rounded focus:outline-none focus:border-gold"
+                                                    value={cardDetails.name}
+                                                    onChange={(e) => setCardDetails({...cardDetails, name: e.target.value})}
+                                                />
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+                                
+                                <div 
+                                    className={`payment-method ${paymentMethod === 'paypal' ? 'selected' : ''}`}
+                                    onClick={() => setPaymentMethod('paypal')}
+                                >
+                                    <div className="flex items-center">
+                                        <i className="fab fa-paypal text-blue-500 text-xl mr-3"></i>
+                                        <div>
+                                            <h4 className="serif text-lg text-charcoal">PayPal</h4>
+                                            <p className="text-sage-green">Pay with your PayPal account</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div 
+                                    className={`payment-method ${paymentMethod === 'apple' ? 'selected' : ''}`}
+                                    onClick={() => setPaymentMethod('apple')}
+                                >
+                                    <div className="flex items-center">
+                                        <i className="fab fa-apple text-charcoal text-xl mr-3"></i>
+                                        <div>
+                                            <h4 className="serif text-lg text-charcoal">Apple Pay</h4>
+                                            <p className="text-sage-green">Pay with Apple Pay</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div className="bg-white p-6 rounded-lg luxury-shadow luxury-border mb-6">
+                            <h3 className="serif text-xl text-charcoal mb-4">Order Summary</h3>
+                            <div className="flex justify-between items-center border-b border-sage-green pb-4 mb-4">
+                                <span className="text-charcoal">Order Total</span>
+                                <span className="serif text-xl text-dark-green">${orderTotal}</span>
+                            </div>
+                            <div className="flex justify-between items-center">
+                                <span className="text-charcoal font-semibold">Total to Pay</span>
+                                <span className="serif text-2xl text-dark-green font-bold">${orderTotal}</span>
+                            </div>
+                        </div>
+                        
+                        <div className="flex space-x-4">
+                            <button 
+                                className="flex-1 bg-sage-green text-cream py-3 rounded serif text-lg hover:bg-opacity-90 transition-colors"
+                                onClick={onBack}
+                            >
+                                <i className="fas fa-arrow-left mr-2"></i>Back to Shipping
+                            </button>
+                            <button 
+                                className="flex-1 btn-luxury py-3 rounded serif text-lg flex items-center justify-center"
+                                onClick={handlePayment}
+                                disabled={isProcessing}
+                            >
+                                {isProcessing ? (
+                                    <>
+                                        <div className="payment-loading mr-2"></div>
+                                        Processing...
+                                    </>
+                                ) : (
+                                    <>
+                                        <i className="fas fa-lock mr-2"></i>
+                                        Complete Payment
+                                    </>
+                                )}
+                            </button>
+                        </div>
+                        
+                        <div className="mt-6 text-center text-sage-green text-sm">
+                            <p>Your payment is secured with 256-bit SSL encryption</p>
+                            <div className="flex justify-center space-x-4 mt-2">
+                                <i className="fab fa-cc-visa text-2xl"></i>
+                                <i className="fab fa-cc-mastercard text-2xl"></i>
+                                <i className="fab fa-cc-amex text-2xl"></i>
+                                <i className="fab fa-cc-paypal text-2xl"></i>
+                                <i className="fab fa-apple-pay text-2xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                );
+            };
+            
+            // Admin Dashboard Component
+            const AdminDashboard = () => {
+                const [activeTab, setActiveTab] = useState('overview');
+                const [products, setProducts] = useState([]);
+                
+                // Stats for the dashboard
+                const stats = {
+                    totalSales: 125430,
+                    totalOrders: orders.length,
+                    newCustomers: 47,
+                    inventoryItems: 45
+                };
+                
+                return (
+                    <div className="min-h-screen bg-gray-50">
+                        {/* Sidebar */}
+                        <div className="admin-sidebar">
+                            <div className="p-6">
+                                <h2 className="serif text-2xl font-bold text-gold mb-8">Almond Admin</h2>
+                                <nav className="space-y-2">
+                                    {[
+                                        { id: 'overview', name: 'Overview', icon: 'tachometer-alt' },
+                                        { id: 'products', name: 'Products', icon: 'tshirt' },
+                                        { id: 'orders', name: 'Orders', icon: 'shopping-bag' },
+                                        { id: 'customers', name: 'Customers', icon: 'users' },
+                                        { id: 'analytics', name: 'Analytics', icon: 'chart-bar' },
+                                        { id: 'settings', name: 'Settings', icon: 'cog' }
+                                    ].map(item => (
+                                        <button
+                                            key={item.id}
+                                            className={`w-full text-left py-3 px-4 rounded-lg transition-colors flex items-center ${
+                                                activeTab === item.id ? 'bg-gold text-dark-green' : 'text-cream hover:bg-sage-green'
+                                            }`}
+                                            onClick={() => setActiveTab(item.id)}
+                                        >
+                                            <i className={`fas fa-${item.icon} mr-3`}></i>
+                                            {item.name}
+                                        </button>
+                                    ))}
+                                </nav>
+                            </div>
+                        </div>
+                        
+                        {/* Main Content */}
+                        <div className="admin-main">
+                            <div className="flex justify-between items-center mb-8">
+                                <h1 className="serif text-3xl text-charcoal">Dashboard Overview</h1>
+                                <div className="flex items-center space-x-4">
+                                    <button className="bg-dark-green text-cream px-4 py-2 rounded-lg hover:bg-opacity-90 transition-colors">
+                                        <i className="fas fa-bell mr-2"></i>
+                                        Notifications
+                                    </button>
+                                    <button 
+                                        className="bg-sage-green text-cream px-4 py-2 rounded-lg hover:bg-opacity-90 transition-colors"
+                                        onClick={() => {
+                                            setIsAdmin(false);
+                                            setCurrentPage('home');
+                                        }}
+                                    >
+                                        <i className="fas fa-sign-out-alt mr-2"></i>
+                                        Logout
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            {activeTab === 'overview' && (
+                                <div className="fade-in-left">
+                                    {/* Stats Grid */}
+                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                                        <div className="stat-card">
+                                            <div className="flex items-center">
+                                                <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mr-4">
+                                                    <i className="fas fa-dollar-sign text-green-600 text-xl"></i>
+                                                </div>
+                                                <div>
+                                                    <p className="text-sage-green text-sm">Total Sales</p>
+                                                    <h3 className="serif text-2xl text-charcoal">${stats.totalSales.toLocaleString()}</h3>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div className="stat-card">
+                                            <div className="flex items-center">
+                                                <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mr-4">
+                                                    <i className="fas fa-shopping-bag text-blue-600 text-xl"></i>
+                                                </div>
+                                                <div>
+                                                    <p className="text-sage-green text-sm">Total Orders</p>
+                                                    <h3 className="serif text-2xl text-charcoal">{stats.totalOrders}</h3>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div className="stat-card">
+                                            <div className="flex items-center">
+                                                <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mr-4">
+                                                    <i className="fas fa-users text-purple-600 text-xl"></i>
+                                                </div>
+                                                <div>
+                                                    <p className="text-sage-green text-sm">New Customers</p>
+                                                    <h3 className="serif text-2xl text-charcoal">{stats.newCustomers}</h3>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div className="stat-card">
+                                            <div className="flex items-center">
+                                                <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center mr-4">
+                                                    <i className="fas fa-boxes text-orange-600 text-xl"></i>
+                                                </div>
+                                                <div>
+                                                    <p className="text-sage-green text-sm">Inventory Items</p>
+                                                    <h3 className="serif text-2xl text-charcoal">{stats.inventoryItems}</h3>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    {/* Recent Orders */}
+                                    <div className="bg-white rounded-lg luxury-shadow luxury-border">
+                                        <div className="p-6 border-b border-sage-green">
+                                            <h2 className="serif text-xl text-charcoal">Recent Orders</h2>
+                                        </div>
+                                        <div className="p-6">
+                                            <div className="overflow-x-auto">
+                                                <table className="w-full">
+                                                    <thead>
+                                                        <tr className="border-b border-sage-green">
+                                                            <th className="text-left py-3 text-charcoal font-semibold">Order ID</th>
+                                                            <th className="text-left py-3 text-charcoal font-semibold">Customer</th>
+                                                            <th className="text-left py-3 text-charcoal font-semibold">Date</th>
+                                                            <th className="text-left py-3 text-charcoal font-semibold">Amount</th>
+                                                            <th className="text-left py-3 text-charcoal font-semibold">Status</th>
+                                                            <th className="text-left py-3 text-charcoal font-semibold">Actions</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {orders.map(order => (
+                                                            <tr key={order.id} className="border-b border-sage-green last:border-0">
+                                                                <td className="py-4 text-dark-green font-medium">{order.id}</td>
+                                                                <td className="py-4">
+                                                                    <div>
+                                                                        <p className="text-charcoal font-medium">{order.customer}</p>
+                                                                        <p className="text-sage-green text-sm">{order.email}</p>
+                                                                    </div>
+                                                                </td>
+                                                                <td className="py-4 text-charcoal">{order.date}</td>
+                                                                <td className="py-4 text-dark-green font-medium">${order.total}</td>
+                                                                <td className="py-4">
+                                                                    <span className={`px-3 py-1 rounded-full text-xs font-medium ${
+                                                                        order.status === 'delivered' ? 'bg-green-100 text-green-800' :
+                                                                        order.status === 'processing' ? 'bg-blue-100 text-blue-800' :
+                                                                        'bg-yellow-100 text-yellow-800'
+                                                                    }`}>
+                                                                        {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
+                                                                    </span>
+                                                                </td>
+                                                                <td className="py-4">
+                                                                    <button className="text-sage-green hover:text-dark-green mr-3">
+                                                                        <i className="fas fa-eye"></i>
+                                                                    </button>
+                                                                    <button className="text-sage-green hover:text-dark-green">
+                                                                        <i className="fas fa-edit"></i>
+                                                                    </button>
+                                                                </td>
+                                                            </tr>
+                                                        ))}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                            
+                            {activeTab === 'products' && (
+                                <div className="fade-in-left">
+                                    <div className="flex justify-between items-center mb-6">
+                                        <h2 className="serif text-2xl text-charcoal">Product Management</h2>
+                                        <button className="btn-luxury px-4 py-2 rounded-lg">
+                                            <i className="fas fa-plus mr-2"></i>
+                                            Add New Product
+                                        </button>
+                                    </div>
+                                    
+                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                        {products.map(product => (
+                                            <div key={product.id} className="bg-white rounded-lg luxury-shadow luxury-border">
+                                                <div className="h-48 overflow-hidden">
+                                                    <img 
+                                                        src={product.images[0]} 
+                                                        alt={product.name}
+                                                        className="w-full h-full object-cover"
+                                                    />
+                                                </div>
+                                                <div className="p-4">
+                                                    <h3 className="serif text-lg text-charcoal mb-2">{product.name}</h3>
+                                                    <p className="text-sage-green mb-2">${product.price}</p>
+                                                    <p className="text-sage-green text-sm mb-4">Stock: {product.inventory}</p>
+                                                    <div className="flex space-x-2">
+                                                        <button className="flex-1 bg-sage-green text-cream py-2 rounded text-sm hover:bg-opacity-90 transition-colors">
+                                                            <i className="fas fa-edit mr-1"></i> Edit
+                                                        </button>
+                                                        <button className="flex-1 bg-red-100 text-red-600 py-2 rounded text-sm hover:bg-red-200 transition-colors">
+                                                            <i className="fas fa-trash mr-1"></i> Delete
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+                            
+                            {activeTab === 'orders' && (
+                                <div className="fade-in-left">
+                                    <h2 className="serif text-2xl text-charcoal mb-6">Order Management</h2>
+                                    <div className="bg-white rounded-lg luxury-shadow luxury-border">
+                                        <div className="p-6">
+                                            <div className="overflow-x-auto">
+                                                <table className="w-full">
+                                                    <thead>
+                                                        <tr className="border-b border-sage-green">
+                                                            <th className="text-left py-3 text-charcoal font-semibold">Order ID</th>
+                                                            <th className="text-left py-3 text-charcoal font-semibold">Customer</th>
+                                                            <th className="text-left py-3 text-charcoal font-semibold">Date</th>
+                                                            <th className="text-left py-3 text-charcoal font-semibold">Items</th>
+                                                            <th className="text-left py-3 text-charcoal font-semibold">Amount</th>
+                                                            <th className="text-left py-3 text-charcoal font-semibold">Status</th>
+                                                            <th className="text-left py-3 text-charcoal font-semibold">Actions</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {orders.map(order => (
+                                                            <tr key={order.id} className="border-b border-sage-green last:border-0">
+                                                                <td className="py-4 text-dark-green font-medium">{order.id}</td>
+                                                                <td className="py-4">
+                                                                    <div>
+                                                                        <p className="text-charcoal font-medium">{order.customer}</p>
+                                                                        <p className="text-sage-green text-sm">{order.email}</p>
+                                                                    </div>
+                                                                </td>
+                                                                <td className="py-4 text-charcoal">{order.date}</td>
+                                                                <td className="py-4 text-charcoal">
+                                                                    {order.items.map(item => (
+                                                                        <div key={item.name} className="text-sm">
+                                                                            {item.name} (x{item.quantity})
+                                                                        </div>
+                                                                    ))}
+                                                                </td>
+                                                                <td className="py-4 text-dark-green font-medium">${order.total}</td>
+                                                                <td className="py-4">
+                                                                    <select 
+                                                                        className={`px-3 py-1 rounded-full text-xs font-medium border ${
+                                                                            order.status === 'delivered' ? 'bg-green-100 text-green-800 border-green-300' :
+                                                                            order.status === 'processing' ? 'bg-blue-100 text-blue-800 border-blue-300' :
+                                                                            'bg-yellow-100 text-yellow-800 border-yellow-300'
+                                                                        }`}
+                                                                        value={order.status}
+                                                                    >
+                                                                        <option value="pending">Pending</option>
+                                                                        <option value="processing">Processing</option>
+                                                                        <option value="shipped">Shipped</option>
+                                                                        <option value="delivered">Delivered</option>
+                                                                        <option value="cancelled">Cancelled</option>
+                                                                    </select>
+                                                                </td>
+                                                                <td className="py-4">
+                                                                    <button className="text-sage-green hover:text-dark-green mr-3">
+                                                                        <i className="fas fa-eye"></i>
+                                                                    </button>
+                                                                    <button className="text-sage-green hover:text-dark-green">
+                                                                        <i className="fas fa-edit"></i>
+                                                                    </button>
+                                                                </td>
+                                                            </tr>
+                                                        ))}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                );
+            };
+            
+            // Home Page
+            const HomePage = () => (
+                <div>
+                    <section className="relative h-screen flex items-center justify-center bg-cover bg-center" 
+                             style={{backgroundImage: 'url(https://images.unsplash.com/photo-1441986300917-64674bd600d8?ixlib=rb-4.0.3&auto=format&fit=crop&w=1950&q=80)'}}>
+                        <div className="absolute inset-0 bg-dark-green opacity-70"></div>
+                        <div className="relative z-10 text-center text-cream max-w-3xl mx-auto px-4 stagger-children">
+                            <h1 className="serif text-5xl md:text-7xl font-light mb-6">Timeless Elegance</h1>
+                            <p className="text-xl mb-8 max-w-2xl mx-auto">
+                                Discover our collection of luxury clothing that blends modern sophistication with classic style.
+                            </p>
+                            <button 
+                                className="btn-gold px-8 py-3 rounded serif text-lg font-medium"
+                                onClick={() => setCurrentPage('shop')}
+                            >
+                                <i className="fas fa-arrow-right mr-2"></i>
+                                Shop The Collection
+                            </button>
+                        </div>
+                    </section>
+                    
+                    <section className="py-16 bg-cream">
+                        <div className="container mx-auto px-4">
+                            <h2 className="serif text-4xl text-center text-charcoal mb-12 fade-in-left">Featured Collection</h2>
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                                {products.map((product, index) => (
+                                    <ProductCard key={product.id} product={product} index={index} />
+                                ))}
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            );
+            
+            // Shop Page
+            const ShopPage = () => (
+                <div className="py-12">
+                    <div className="container mx-auto px-4">
+                        <h1 className="serif text-4xl text-center text-charcoal mb-12 fade-in-left">Shop The Collection</h1>
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                            {products.map((product, index) => (
+                                <ProductCard key={product.id} product={product} index={index} />
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            );
+            
+            // Product Detail Page
+            const ProductDetailPage = () => {
+                const [selectedImage, setSelectedImage] = useState(0);
+                const [selectedSize, setSelectedSize] = useState(selectedProduct.sizes[0]);
+                const [selectedColor, setSelectedColor] = useState(selectedProduct.colors[0]);
+                const [quantity, setQuantity] = useState(1);
+                
+                if (!selectedProduct) return <div>Product not found</div>;
+                
+                return (
+                    <div className="py-12 fade-in-left">
+                        <div className="container mx-auto px-4">
+                            <button 
+                                className="mb-6 text-sage-green hover:text-dark-green flex items-center transition-colors"
+                                onClick={() => setCurrentPage('shop')}
+                            >
+                                <i className="fas fa-arrow-left mr-2"></i> Back to Shop
+                            </button>
+                            
+                            <div className="flex flex-col lg:flex-row gap-12">
+                                {/* Product Images */}
+                                <div className="lg:w-1/2">
+                                    <div className="product-gallery">
+                                        <div className="h-96 overflow-hidden rounded-lg luxury-shadow mb-4">
+                                            <img 
+                                                src={selectedProduct.images[selectedImage]} 
+                                                alt={selectedProduct.name} 
+                                                className="w-full h-full object-cover"
+                                            />
+                                        </div>
+                                        <div className="product-thumbnails">
+                                            {selectedProduct.images.map((image, index) => (
+                                                <img 
+                                                    key={index}
+                                                    src={image}
+                                                    alt={`${selectedProduct.name} view ${index + 1}`}
+                                                    className={`product-thumbnail rounded ${selectedImage === index ? 'active' : ''}`}
+                                                    onClick={() => setSelectedImage(index)}
+                                                />
+                                            ))}
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                {/* Product Details */}
+                                <div className="lg:w-1/2">
+                                    <h1 className="serif text-4xl text-charcoal mb-2">{selectedProduct.name}</h1>
+                                    <p className="text-2xl text-dark-green mb-6">${selectedProduct.price}</p>
+                                    
+                                    <p className="text-sage-green mb-6">{selectedProduct.fullDescription}</p>
+                                    
+                                    {/* Color Selection */}
+                                    <div className="mb-6">
+                                        <h3 className="serif text-lg text-charcoal mb-3 flex items-center">
+                                            <i className="fas fa-palette mr-2 text-gold"></i>Color
+                                        </h3>
+                                        <div className="flex space-x-3">
+                                            {selectedProduct.colors.map(color => (
+                                                <div 
+                                                    key={color.name}
+                                                    className={`color-option ${selectedColor.name === color.name ? 'selected' : ''}`}
+                                                    style={{backgroundColor: color.value}}
+                                                    title={color.name}
+                                                    onClick={() => setSelectedColor(color)}
+                                                ></div>
+                                            ))}
+                                        </div>
+                                        <p className="text-sage-green mt-2">Selected: {selectedColor.name}</p>
+                                    </div>
+                                    
+                                    {/* Size Selection */}
+                                    <div className="mb-6">
+                                        <h3 className="serif text-lg text-charcoal mb-3 flex items-center">
+                                            <i className="fas fa-ruler mr-2 text-gold"></i>Size
+                                        </h3>
+                                        <div className="flex flex-wrap gap-2">
+                                            {selectedProduct.sizes.map(size => (
+                                                <div
+                                                    key={size}
+                                                    className={`size-option rounded ${selectedSize === size ? 'selected' : ''}`}
+                                                    onClick={() => setSelectedSize(size)}
+                                                >
+                                                    {size}
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                    
+                                    {/* Quantity */}
+                                    <div className="mb-6">
+                                        <h3 className="serif text-lg text-charcoal mb-3 flex items-center">
+                                            <i className="fas fa-list-ol mr-2 text-gold"></i>Quantity
+                                        </h3>
+                                        <div className="flex items-center">
+                                            <button 
+                                                className="w-10 h-10 flex items-center justify-center border border-sage-green rounded-l hover:bg-sage-green hover:text-cream transition-colors"
+                                                onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                                            >
+                                                <i className="fas fa-minus"></i>
+                                            </button>
+                                            <span className="w-12 h-10 flex items-center justify-center border-t border-b border-sage-green">
+                                                {quantity}
+                                            </span>
+                                            <button 
+                                                className="w-10 h-10 flex items-center justify-center border border-sage-green rounded-r hover:bg-sage-green hover:text-cream transition-colors"
+                                                onClick={() => setQuantity(quantity + 1)}
+                                            >
+                                                <i className="fas fa-plus"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    
+                                    {/* Action Buttons */}
+                                    <div className="flex space-x-4 mb-8">
+                                        <button 
+                                            className="flex-1 btn-luxury py-3 rounded serif text-lg"
+                                            onClick={() => addToCart(selectedProduct, {
+                                                size: selectedSize,
+                                                color: selectedColor.name,
+                                                quantity: quantity
+                                            })}
+                                        >
+                                            <i className="fas fa-shopping-bag mr-2"></i>Add to Cart
+                                        </button>
+                                        
+                                        <button 
+                                            className="flex-1 border border-dark-green text-dark-green py-3 rounded serif text-lg hover:bg-dark-green hover:text-cream transition-colors"
+                                            onClick={() => {
+                                                addToCart(selectedProduct, {
+                                                    size: selectedSize,
+                                                    color: selectedColor.name,
+                                                    quantity: quantity
+                                                });
+                                                setCurrentPage('cart');
+                                            }}
+                                        >
+                                            <i className="fas fa-bolt mr-2"></i>Buy Now
+                                        </button>
+                                    </div>
+                                    
+                                    {/* Product Details */}
+                                    <div className="mb-8">
+                                        <h3 className="serif text-lg text-charcoal mb-3 flex items-center">
+                                            <i className="fas fa-info-circle mr-2 text-gold"></i>Product Details
+                                        </h3>
+                                        <ul className="list-disc pl-5 text-sage-green">
+                                            {selectedProduct.details.map((detail, index) => (
+                                                <li key={index}>{detail}</li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                    
+                                    {/* Care Instructions */}
+                                    <div>
+                                        <h3 className="serif text-lg text-charcoal mb-3 flex items-center">
+                                            <i className="fas fa-leaf mr-2 text-gold"></i>Care Instructions
+                                        </h3>
+                                        <p className="text-sage-green">{selectedProduct.care}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                );
+            };
+            
+            // Checkout Process
+            const CheckoutProcess = () => {
+                const [checkoutStep, setCheckoutStep] = useState('shipping');
+                const [shippingInfo, setShippingInfo] = useState({
+                    firstName: '',
+                    lastName: '',
+                    email: '',
+                    address: '',
+                    city: '',
+                    state: '',
+                    zipCode: '',
+                    country: 'United States'
+                });
+                
+                const cartTotal = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+                const shippingCost = 15;
+                const tax = cartTotal * 0.08;
+                const orderTotal = cartTotal + shippingCost + tax;
+                
+                const handleShippingSubmit = (e) => {
+                    e.preventDefault();
+                    setCheckoutStep('payment');
+                };
+                
+                const handlePaymentSuccess = () => {
+                    // Create new order
+                    const newOrder = {
+                        id: 'ORD-' + Date.now(),
+                        date: new Date().toISOString().split('T')[0],
+                        customer: `${shippingInfo.firstName} ${shippingInfo.lastName}`,
+                        email: shippingInfo.email,
+                        total: orderTotal,
+                        status: 'processing',
+                        items: cart,
+                        shipping: shippingInfo
+                    };
+                    
+                    // Add to orders
+                    const updatedOrders = [newOrder, ...orders];
+                    setOrders(updatedOrders);
+                    localStorage.setItem('almond_orders', JSON.stringify(updatedOrders));
+                    
+                    // Clear cart and show confirmation
+                    setCart([]);
+                    setCheckoutStep('confirmation');
+                };
+                
+                if (cart.length === 0 && checkoutStep !== 'confirmation') {
+                    return (
+                        <div className="py-12">
+                            <div className="container mx-auto px-4 text-center">
+                                <div className="bg-white p-12 rounded-lg luxury-shadow luxury-border max-w-md mx-auto">
+                                    <i className="fas fa-shopping-bag text-sage-green text-5xl mb-4"></i>
+                                    <h1 className="serif text-3xl text-charcoal mb-4">Your Cart is Empty</h1>
+                                    <p className="text-sage-green mb-8">Add some luxurious pieces to your cart first.</p>
+                                    <button 
+                                        className="btn-luxury px-6 py-3 rounded serif text-lg"
+                                        onClick={() => setCurrentPage('shop')}
+                                    >
+                                        <i className="fas fa-arrow-right mr-2"></i>Continue Shopping
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    );
+                }
+                
+                return (
+                    <div className="py-12">
+                        <div className="container mx-auto px-4 max-w-4xl">
+                            <h1 className="serif text-4xl text-center text-charcoal mb-12 fade-in-left">Checkout</h1>
+                            
+                            {/* Checkout Steps */}
+                            <div className="flex justify-center mb-12">
+                                {['shipping', 'payment', 'confirmation'].map((step, index) => (
+                                    <div key={step} className="flex items-center">
+                                        <div className={`flex items-center justify-center w-10 h-10 rounded-full ${
+                                            checkoutStep === step ? 'bg-dark-green text-cream' : 
+                                            checkoutStep === 'confirmation' || step === 'payment' && checkoutStep === 'confirmation' ? 'bg-sage-green text-cream' : 
+                                            'bg-gray-200 text-gray-500'
+                                        }`}>
+                                            {checkoutStep === 'confirmation' && step === 'confirmation' ? (
+                                                <i className="fas fa-check"></i>
+                                            ) : (
+                                                index + 1
+                                            )}
+                                        </div>
+                                        {index < 2 && <div className="w-16 h-1 bg-sage-green mx-2"></div>}
+                                    </div>
+                                ))}
+                            </div>
+                            
+                            {/* Shipping Step */}
+                            {checkoutStep === 'shipping' && (
+                                <div className="fade-in-left">
+                                    <div className="bg-white p-6 rounded-lg luxury-shadow luxury-border mb-6">
+                                        <h2 className="serif text-2xl text-charcoal mb-4">Shipping Information</h2>
+                                        <form onSubmit={handleShippingSubmit}>
+                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                                                <div>
+                                                    <label className="block text-charcoal mb-2">First Name</label>
+                                                    <input 
+                                                        type="text" 
+                                                        name="firstName"
+                                                        value={shippingInfo.firstName}
+                                                        onChange={(e) => setShippingInfo({...shippingInfo, firstName: e.target.value})}
+                                                        className="w-full px-4 py-2 border border-sage-green rounded focus:outline-none focus:border-gold"
+                                                        required
+                                                    />
+                                                </div>
+                                                <div>
+                                                    <label className="block text-charcoal mb-2">Last Name</label>
+                                                    <input 
+                                                        type="text" 
+                                                        name="lastName"
+                                                        value={shippingInfo.lastName}
+                                                        onChange={(e) => setShippingInfo({...shippingInfo, lastName: e.target.value})}
+                                                        className="w-full px-4 py-2 border border-sage-green rounded focus:outline-none focus:border-gold"
+                                                        required
+                                                    />
+                                                </div>
+                                            </div>
+                                            <div className="mb-4">
+                                                <label className="block text-charcoal mb-2">Email</label>
+                                                <input 
+                                                    type="email" 
+                                                    name="email"
+                                                    value={shippingInfo.email}
+                                                    onChange={(e) => setShippingInfo({...shippingInfo, email: e.target.value})}
+                                                    className="w-full px-4 py-2 border border-sage-green rounded focus:outline-none focus:border-gold"
+                                                    required
+                                                />
+                                            </div>
+                                            <div className="mb-4">
+                                                <label className="block text-charcoal mb-2">Address</label>
+                                                <input 
+                                                    type="text" 
+                                                    name="address"
+                                                    value={shippingInfo.address}
+                                                    onChange={(e) => setShippingInfo({...shippingInfo, address: e.target.value})}
+                                                    className="w-full px-4 py-2 border border-sage-green rounded focus:outline-none focus:border-gold"
+                                                    required
+                                                />
+                                            </div>
+                                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                                                <div>
+                                                    <label className="block text-charcoal mb-2">City</label>
+                                                    <input 
+                                                        type="text" 
+                                                        name="city"
+                                                        value={shippingInfo.city}
+                                                        onChange={(e) => setShippingInfo({...shippingInfo, city: e.target.value})}
+                                                        className="w-full px-4 py-2 border border-sage-green rounded focus:outline-none focus:border-gold"
+                                                        required
+                                                    />
+                                                </div>
+                                                <div>
+                                                    <label className="block text-charcoal mb-2">State</label>
+                                                    <input 
+                                                        type="text" 
+                                                        name="state"
+                                                        value={shippingInfo.state}
+                                                        onChange={(e) => setShippingInfo({...shippingInfo, state: e.target.value})}
+                                                        className="w-full px-4 py-2 border border-sage-green rounded focus:outline-none focus:border-gold"
+                                                        required
+                                                    />
+                                                </div>
+                                                <div>
+                                                    <label className="block text-charcoal mb-2">ZIP Code</label>
+                                                    <input 
+                                                        type="text" 
+                                                        name="zipCode"
+                                                        value={shippingInfo.zipCode}
+                                                        onChange={(e) => setShippingInfo({...shippingInfo, zipCode: e.target.value})}
+                                                        className="w-full px-4 py-2 border border-sage-green rounded focus:outline-none focus:border-gold"
+                                                        required
+                                                    />
+                                                </div>
+                                            </div>
+                                            <div className="mb-4">
+                                                <label className="block text-charcoal mb-2">Country</label>
+                                                <select 
+                                                    name="country"
+                                                    value={shippingInfo.country}
+                                                    onChange={(e) => setShippingInfo({...shippingInfo, country: e.target.value})}
+                                                    className="w-full px-4 py-2 border border-sage-green rounded focus:outline-none focus:border-gold"
+                                                >
+                                                    <option value="United States">United States</option>
+                                                    <option value="Canada">Canada</option>
+                                                    <option value="United Kingdom">United Kingdom</option>
+                                                    <option value="Australia">Australia</option>
+                                                    <option value="Other">Other</option>
+                                                </select>
+                                            </div>
+                                            <button 
+                                                type="submit"
+                                                className="w-full btn-luxury py-3 rounded serif text-lg mt-4"
+                                            >
+                                                Continue to Payment
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            )}
+                            
+                            {/* Payment Step */}
+                            {checkoutStep === 'payment' && (
+                                <PaymentProcessing 
+                                    orderTotal={orderTotal}
+                                    onPaymentSuccess={handlePaymentSuccess}
+                                    onBack={() => setCheckoutStep('shipping')}
+                                />
+                            )}
+                            
+                            {/* Confirmation Step */}
+                            {checkoutStep === 'confirmation' && (
+                                <div className="text-center py-12 fade-in-up">
+                                    <div className="bg-white p-8 rounded-lg luxury-shadow luxury-border max-w-2xl mx-auto">
+                                        <div className="w-20 h-20 mx-auto mb-6 bg-gold rounded-full flex items-center justify-center text-dark-green text-3xl">
+                                            <i className="fas fa-check"></i>
+                                        </div>
+                                        <h2 className="serif text-3xl text-charcoal mb-4">Thank You for Your Order!</h2>
+                                        <p className="text-sage-green mb-6">
+                                            Your order has been confirmed and will be processed shortly. You will receive an email confirmation with your order details and tracking information.
+                                        </p>
+                                        <div className="bg-cream p-6 rounded-lg mb-6">
+                                            <h3 className="serif text-xl text-charcoal mb-4">Order Summary</h3>
+                                            {cart.map(item => (
+                                                <div key={item.id} className="flex justify-between py-2 border-b border-sage-green last:border-0">
+                                                    <span className="text-charcoal">{item.name} x {item.quantity}</span>
+                                                    <span className="text-dark-green">${item.price * item.quantity}</span>
+                                                </div>
+                                            ))}
+                                            <div className="flex justify-between pt-2 mt-2 font-semibold">
+                                                <span className="text-charcoal">Total</span>
+                                                <span className="text-dark-green">${orderTotal}</span>
+                                            </div>
+                                        </div>
+                                        <button 
+                                            className="btn-luxury px-6 py-3 rounded serif text-lg"
+                                            onClick={() => setCurrentPage('shop')}
+                                        >
+                                            <i className="fas fa-arrow-right mr-2"></i>Continue Shopping
+                                        </button>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                );
+            };
+            
+            // About Page
+            const AboutPage = () => (
+                <div className="py-12">
+                    <div className="container mx-auto px-4 max-w-4xl">
+                        <h1 className="serif text-4xl text-center text-charcoal mb-12 fade-in-left">About Almond</h1>
+                        <div className="bg-white p-8 rounded-lg luxury-shadow luxury-border fade-in-left">
+                            <h2 className="serif text-3xl text-charcoal mb-6">Our Heritage</h2>
+                            <p className="text-sage-green mb-4">
+                                Founded in 1995, Almond has been redefining luxury fashion by blending timeless elegance with contemporary design. 
+                                Our collections are crafted for individuals who appreciate quality, attention to detail, and enduring style.
+                            </p>
+                            <p className="text-sage-green mb-6">
+                                We source only the finest materials from around the world and work with master artisans to create pieces 
+                                that will become cherished additions to your wardrobe for years to come.
+                            </p>
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-8">
+                                <div className="text-center p-6 luxury-border rounded-lg fade-in-left" style={{animationDelay: '0.1s'}}>
+                                    <div className="w-16 h-16 mx-auto mb-4 bg-gold rounded-full flex items-center justify-center text-dark-green text-2xl">
+                                        <i className="fas fa-gem"></i>
+                                    </div>
+                                    <h3 className="serif text-xl text-charcoal mb-2">Quality Craftsmanship</h3>
+                                    <p className="text-sage-green">
+                                        We source only the finest materials and work with master artisans.
+                                    </p>
+                                </div>
+                                <div className="text-center p-6 luxury-border rounded-lg fade-in-left" style={{animationDelay: '0.2s'}}>
+                                    <div className="w-16 h-16 mx-auto mb-4 bg-gold rounded-full flex items-center justify-center text-dark-green text-2xl">
+                                        <i className="fas fa-leaf"></i>
+                                    </div>
+                                    <h3 className="serif text-xl text-charcoal mb-2">Sustainable Luxury</h3>
+                                    <p className="text-sage-green">
+                                        We prioritize ethical production and sustainable practices.
+                                    </p>
+                                </div>
+                                <div className="text-center p-6 luxury-border rounded-lg fade-in-left" style={{animationDelay: '0.3s'}}>
+                                    <div className="w-16 h-16 mx-auto mb-4 bg-gold rounded-full flex items-center justify-center text-dark-green text-2xl">
+                                        <i className="fas fa-hands-helping"></i>
+                                    </div>
+                                    <h3 className="serif text-xl text-charcoal mb-2">Personal Service</h3>
+                                    <p className="text-sage-green">
+                                        We build lasting relationships with our clients.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+            
+            // Contact Page
+            const ContactPage = () => (
+                <div className="py-12">
+                    <div className="container mx-auto px-4 max-w-4xl">
+                        <h1 className="serif text-4xl text-center text-charcoal mb-12 fade-in-left">Contact Us</h1>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+                            <div className="bg-white p-8 rounded-lg luxury-shadow luxury-border fade-in-left">
+                                <h2 className="serif text-2xl text-charcoal mb-6">Send Us a Message</h2>
+                                <form>
+                                    <div className="mb-4">
+                                        <label className="block text-charcoal mb-2">Name</label>
+                                        <input 
+                                            type="text" 
+                                            className="w-full px-4 py-2 border border-sage-green rounded focus:outline-none focus:border-gold"
+                                            required
+                                        />
+                                    </div>
+                                    <div className="mb-4">
+                                        <label className="block text-charcoal mb-2">Email</label>
+                                        <input 
+                                            type="email" 
+                                            className="w-full px-4 py-2 border border-sage-green rounded focus:outline-none focus:border-gold"
+                                            required
+                                        />
+                                    </div>
+                                    <div className="mb-4">
+                                        <label className="block text-charcoal mb-2">Message</label>
+                                        <textarea 
+                                            rows="5"
+                                            className="w-full px-4 py-2 border border-sage-green rounded focus:outline-none focus:border-gold"
+                                            required
+                                        ></textarea>
+                                    </div>
+                                    <button 
+                                        type="submit"
+                                        className="w-full btn-luxury py-3 rounded serif text-lg"
+                                    >
+                                        <i className="fas fa-paper-plane mr-2"></i>Send Message
+                                    </button>
+                                </form>
+                            </div>
+                            <div className="fade-in-right">
+                                <h2 className="serif text-2xl text-charcoal mb-6">Get In Touch</h2>
+                                <div className="space-y-6">
+                                    <div className="bg-white p-6 rounded-lg luxury-shadow luxury-border fade-in-right" style={{animationDelay: '0.1s'}}>
+                                        <h3 className="serif text-lg text-charcoal mb-2">
+                                            <i className="fas fa-headset mr-2 text-gold"></i>Customer Service
+                                        </h3>
+                                        <p className="text-sage-green">Email: service@almondluxury.com</p>
+                                        <p className="text-sage-green">Phone: +1 (800) 123-4567</p>
+                                    </div>
+                                    <div className="bg-white p-6 rounded-lg luxury-shadow luxury-border fade-in-right" style={{animationDelay: '0.2s'}}>
+                                        <h3 className="serif text-lg text-charcoal mb-2">
+                                            <i className="fas fa-store mr-2 text-gold"></i>New York Flagship
+                                        </h3>
+                                        <p className="text-sage-green">123 Madison Avenue</p>
+                                        <p className="text-sage-green">New York, NY 10021</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+            
+            // Cart Page
+            const CartPage = () => (
+                <div className="py-12">
+                    <div className="container mx-auto px-4 max-w-4xl">
+                        <h1 className="serif text-4xl text-center text-charcoal mb-12 fade-in-left">Your Shopping Cart</h1>
+                        {cart.length === 0 ? (
+                            <div className="text-center py-12 fade-in-up">
+                                <i className="fas fa-shopping-bag text-sage-green text-5xl mb-4"></i>
+                                <p className="serif text-2xl text-sage-green mb-4">Your cart is empty</p>
+                                <button 
+                                    className="btn-luxury px-6 py-3 rounded serif text-lg"
+                                    onClick={() => setCurrentPage('shop')}
+                                >
+                                    <i className="fas fa-arrow-right mr-2"></i>Continue Shopping
+                                </button>
+                            </div>
+                        ) : (
+                            <div className="bg-white p-6 rounded-lg luxury-shadow luxury-border fade-in-left">
+                                {cart.map((item, index) => (
+                                    <div 
+                                        key={`${item.id}-${index}`} 
+                                        className="flex items-center py-4 border-b border-sage-green last:border-0 fade-in-left"
+                                        style={{animationDelay: `${index * 0.1}s`}}
+                                    >
+                                        <div className="w-20 h-20 overflow-hidden rounded luxury-border">
+                                            <img src={item.images[0]} alt={item.name} className="w-full h-full object-cover" />
+                                        </div>
+                                        <div className="ml-4 flex-grow">
+                                            <h3 className="serif text-lg text-charcoal">{item.name}</h3>
+                                            <p className="text-sage-green">
+                                                Size: {item.selectedSize} | Color: {item.selectedColor} | Qty: {item.quantity}
+                                            </p>
+                                        </div>
+                                        <div className="text-right">
+                                            <p className="serif text-lg text-dark-green">${item.price * item.quantity}</p>
+                                            <button 
+                                                className="text-sage-green hover:text-dark-green mt-1"
+                                                onClick={() => setCart(cart.filter((_, i) => i !== index))}
+                                            >
+                                                <i className="fas fa-trash-alt mr-1"></i>Remove
+                                            </button>
+                                        </div>
+                                    </div>
+                                ))}
+                                <div className="flex justify-between border-t border-sage-green pt-4 mt-4">
+                                    <span className="serif text-xl text-charcoal font-medium">Total</span>
+                                    <span className="serif text-xl text-dark-green font-medium">
+                                        ${cart.reduce((total, item) => total + (item.price * item.quantity), 0)}
+                                    </span>
+                                </div>
+                                <button 
+                                    className="w-full btn-luxury py-3 rounded serif text-lg mt-6"
+                                    onClick={() => setCurrentPage('checkout')}
+                                >
+                                    <i className="fas fa-lock mr-2"></i>Proceed to Checkout
+                                </button>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            );
+            
+            // Footer
+            const Footer = () => (
+                <footer className="bg-charcoal text-cream py-12 mt-12">
+                    <div className="container mx-auto px-4">
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                            <div className="fade-in-left">
+                                <h3 className="serif text-2xl font-bold mb-4">Almond</h3>
+                                <p className="text-sage-green mb-4">
+                                    Timeless luxury for the modern individual.
+                                </p>
+                            </div>
+                            <div className="fade-in-left" style={{animationDelay: '0.1s'}}>
+                                <h4 className="serif text-lg font-semibold mb-4">Information</h4>
+                                <ul className="space-y-2 text-sage-green">
+                                    <li className="hover:text-gold cursor-pointer" onClick={() => setCurrentPage('about')}>About Us</li>
+                                    <li className="hover:text-gold cursor-pointer" onClick={() => setCurrentPage('contact')}>Contact</li>
+                                    <li className="hover:text-gold cursor-pointer">Shipping & Returns</li>
+                                </ul>
+                            </div>
+                            <div className="fade-in-left" style={{animationDelay: '0.2s'}}>
+                                <h4 className="serif text-lg font-semibold mb-4">Connect</h4>
+                                <div className="flex space-x-4">
+                                    <a href="#" className="text-sage-green hover:text-gold text-lg">
+                                        <i className="fab fa-instagram"></i>
+                                    </a>
+                                    <a href="#" className="text-sage-green hover:text-gold text-lg">
+                                        <i className="fab fa-pinterest"></i>
+                                    </a>
+                                    <a href="#" className="text-sage-green hover:text-gold text-lg">
+                                        <i className="fab fa-facebook-f"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="border-t border-sage-green mt-8 pt-8 text-center text-sage-green fade-in-up">
+                            <p>&copy; {new Date().getFullYear()} Almond Luxury Clothing. All rights reserved.</p>
+                        </div>
+                    </div>
+                </footer>
+            );
+            
+            // Render current page
+            const renderPage = () => {
+                switch(currentPage) {
+                    case 'home':
+                        return <HomePage />;
+                    case 'shop':
+                        return <ShopPage />;
+                    case 'product-detail':
+                        return <ProductDetailPage />;
+                    case 'about':
+                        return <AboutPage />;
+                    case 'contact':
+                        return <ContactPage />;
+                    case 'cart':
+                        return <CartPage />;
+                    case 'checkout':
+                        return <CheckoutProcess />;
+                    case 'admin-dashboard':
+                        return <AdminDashboard />;
+                    default:
+                        return <HomePage />;
+                }
+            };
+            
+            return (
+                <div className="min-h-screen flex flex-col">
+                    {!isAdmin && <Navigation />}
+                    <main className="flex-grow">
+                        {renderPage()}
+                    </main>
+                    {!isAdmin && <Footer />}
+                </div>
+            );
+        }
+
+        // Render the app
+        ReactDOM.render(<App />, document.getElementById('root'));
+    </script>
+</body>
+</html>
